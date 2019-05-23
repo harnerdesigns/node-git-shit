@@ -4,10 +4,6 @@ const path = require('path')
 
 require('dotenv').config({ path: path.resolve(__dirname, './.env') })
 
-console.log(path.resolve(__dirname, './.env'));
-
-console.log(process.env)
-
 var client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -49,7 +45,7 @@ const formatTweet = function (tweetData) {
     const { message, languages } = tweetData
     let tweet;
     message.replace("(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?", '[url removed]');
-    message.replace("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", "[email removed]")
+    message.replace(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "[email removed]")
     message.replace("(Merge pull request #[0-9] from [A-z0-9/])", '')
     tweet = '"' + message + '"\n~ ~ ~ ~ ~\n' + languages
 
