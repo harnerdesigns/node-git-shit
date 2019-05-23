@@ -63,7 +63,7 @@ const postTweet = function (tweet) {
     if(process.env.TWEET === "true"){
 
         client.post('statuses/update', tweetData, function (err, response) {
-            if (err) {console.log(err)} else {
+            if (err) {throw (err)} else {
                 console.log('Tweeted: ', tweet)
             }
         });
@@ -115,4 +115,5 @@ searchCommits()
     .then(formatTweet)
     .then(postTweet).catch(function(err){
         console.log("FUCK UP: " + err);
+        console.log(err);
     });
