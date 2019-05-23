@@ -42,7 +42,7 @@ const searchCommits = function () {
 
 
 const formatTweet = function (tweetData) {
-    const { message, languages } = tweetData
+    let { message, languages } = tweetData
     let tweet;
     message = message.replace(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/, '[url removed]');
     message = message.replace(/([^.@\s]+)(\.[^.@\s]+)*@([^.@\s]+\.)+([^.@\s]+)/,"[Email Removed]")
