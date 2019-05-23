@@ -1,6 +1,6 @@
 var Twitter = require('twitter');
 const Octokit = require('@octokit/rest')
-require('dotenv').config({ path: __dirname + '/./.env' })
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 console.log(__dirname + './.env');
 
