@@ -1,6 +1,5 @@
 var Twitter = require('twitter');
 const Octokit = require('@octokit/rest')
-const config = require('./config.js');
 require('dotenv').config()
 
 var client = new Twitter({
@@ -48,13 +47,13 @@ const formatTweet = function (tweetData) {
     message.replace("(Merge pull request #[0-9] from [A-z0-9/])", '')
     tweet = '"' + message + '"\n~ ~ ~ ~ ~\n' + languages
 
-    if (message.split(' ').length > 3){
+    if (message.split(' ').length > 2){
         return tweet
 
     } else { throw message;}
 }
 
-
+ 
 const postTweet = function (tweet) {
     console.log(tweet);
     tweetData = { status: tweet }
