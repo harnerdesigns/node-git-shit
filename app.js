@@ -1,6 +1,6 @@
 var Twitter = require('twitter');
 const Octokit = require('@octokit/rest')
-require('dotenv').config({ path: __dirname + '/../.env' })
+require('dotenv').config({ path: __dirname + './.env' })
 
 var client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
