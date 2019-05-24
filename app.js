@@ -4,6 +4,8 @@ const path = require('path')
 
 require('dotenv').config({ path: path.resolve(__dirname, './.env') })
 
+const CLquery = process.argv[2];
+
 var client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -11,22 +13,28 @@ var client = new Twitter({
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
- 
+
 
 const octokit = Octokit({
     auth: process.env.GITHUB_AUTH_TOKEN,
     previews: ['cloak-preview']
 })
 
+let words = ["fuck", "shit", "damn", "ass", "motherfucker", "goddamn", "asshole", "unfucked", "unfuck", "fucky", "shitty", "piece of shit", "hate javascript", "fucking", "bitch", "bitchy", "fucked", "cunt", "bastard", "hell", "shitass"]
 
 const searchCommits = function () {
 
-    let words = ["fuck", "shit", "damn", "ass", "motherfucker", "goddamn", "asshole", "unfucked", "unfuck", "fucky", "shitty", "piece of shit", "hate javascript", "fucking", "bitch", "bitchy", "fucked", "cunt", "twat", "bastard", "hell", "shitass"]
     let wordCount = words.length - 1;
     let word = words[Math.floor(Math.random() * wordCount)]
 
+console.log(CLquery);
+    if ( CLquery != null) {
 
-    let options = { q: word }
+        var options = {q: '"' + word + '" "' + CLquery + '"'}
+    } else {
+
+        var options = { q: word }
+    }
     var commit = octokit.search.commits(options).then(({ data }) => {
         // handle data
 
@@ -40,34 +48,53 @@ const searchCommits = function () {
 
 }
 
+function doesItCuss( string, words) {
+  
+    for (var i = 0; i < words.length; i++) {
+      if (string.toLowerCase().indexOf(words[i]) > -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+
 
 const formatTweet = function (tweetData) {
     let { message, languages } = tweetData
     let tweet;
-    message = message.replace(/(Merge pull request #[0-9]* from [A-z0-9.\-]*\/[A-z0-9.\-]*)/, '')
-    message = message.replace(/([^.@\s]+)(\.[^.@\s]+)*@([^.@\s]+\.)+([^.@\s]+)/,"[Email Removed]")
+    console.log("Unformatted: " + message);
+    // Strip Merge Commit Messages
+    message = message.replace(/(Merge (branch|pull request) (#[0-9]*|'[A-z0-9]*') (from|of) [A-z0-9.\-\+\:\@]*\/[A-z0-9.\-]*\r*\n*)/, '')
+    //strip emails
+    message = message.replace(/([^.@\s]+)(\.[^.@\s]+)*@([^.@\s]+\.)+([^.@\s]+)/, "[Email Removed]")
+    //strip urls
     message = message.replace(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/, '[url removed]');
     tweet = '"' + message + '"\n~ ~ ~ ~ ~\n' + languages
 
-    if (message.split(' ').length > 2){
+    if (doesItCuss(message, words)){
+        throw "no cusswords in formatted message: " + message;
+    }
+    if (message.split(' ').length > 2) {
         return tweet
 
-    } else { throw message;}
+    } else { throw "Commit Message Too Short: " + message; }
+
 }
 
- 
+
 const postTweet = function (tweet) {
     console.log(tweet);
     tweetData = { status: tweet }
 
-    if(process.env.TWEET === "true"){
+    if (process.env.TWEET === "true") {
 
         client.post('statuses/update', tweetData, function (err, response) {
-            if (err) {throw (err)} else {
+            if (err) { throw (err) } else {
                 console.log('Tweeted: ', tweet)
             }
         });
-    }else {
+    } else {
         console.log("Tweeting Skipped");
     }
 
@@ -94,7 +121,7 @@ const getLanguages = function (commit) {
                 language = (language === "C#" ? "CSharp" : language)
                 language = (language === "C++" ? "CPlusPlus" : language)
                 language = language.replace(/\s+/g, '');
-                
+
                 var percent = ((bytes / totalBytes) * 100).toFixed(2)
 
                 if (percent < 0.5) { break; }
@@ -114,7 +141,7 @@ const getLanguages = function (commit) {
 searchCommits()
     .then(getLanguages)
     .then(formatTweet)
-    .then(postTweet).catch(function(err){
-        console.log("FUCK UP: " + err);
-        console.log(err);
+    .then(postTweet).catch(function (err) {
+        console.error("FUCK UP: " + err);
+        console.error(err);
     });
