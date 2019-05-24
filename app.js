@@ -44,9 +44,9 @@ const searchCommits = function () {
 const formatTweet = function (tweetData) {
     let { message, languages } = tweetData
     let tweet;
-    message = message.replace(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/, '[url removed]');
-    message = message.replace(/([^.@\s]+)(\.[^.@\s]+)*@([^.@\s]+\.)+([^.@\s]+)/,"[Email Removed]")
     message = message.replace(/(Merge pull request #[0-9]* from [A-z0-9.\-]*\/[A-z0-9.\-]*)/, '')
+    message = message.replace(/([^.@\s]+)(\.[^.@\s]+)*@([^.@\s]+\.)+([^.@\s]+)/,"[Email Removed]")
+    message = message.replace(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/, '[url removed]');
     tweet = '"' + message + '"\n~ ~ ~ ~ ~\n' + languages
 
     if (message.split(' ').length > 2){
