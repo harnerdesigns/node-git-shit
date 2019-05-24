@@ -27,10 +27,10 @@ const searchCommits = function () {
     let wordCount = words.length - 1;
     let word = words[Math.floor(Math.random() * wordCount)]
 
-console.log(CLquery);
-    if ( CLquery != null) {
+    console.log(CLquery);
+    if (CLquery != null) {
 
-        var options = {q: '"' + word + '" "' + CLquery + '"'}
+        var options = { q: '"' + word + '" "' + CLquery + '"' }
     } else {
 
         var options = { q: word }
@@ -48,16 +48,16 @@ console.log(CLquery);
 
 }
 
-function doesItCuss( string, words) {
-  
+function doesItCuss(string, words) {
+
     for (var i = 0; i < words.length; i++) {
-      if (string.toLowerCase().indexOf(words[i]) > -1) {
-        return false;
-      }
+        if (string.toLowerCase().indexOf(words[i]) > -1) {
+            return false;
+        }
     }
     return true;
-  }
-  
+}
+
 
 
 const formatTweet = function (tweetData) {
@@ -72,7 +72,7 @@ const formatTweet = function (tweetData) {
     message = message.replace(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/, '[url removed]');
     tweet = '"' + message + '"\n~ ~ ~ ~ ~\n' + languages
 
-    if (doesItCuss(message, words)){
+    if (doesItCuss(message, words)) {
         throw "no cusswords in formatted message: " + message;
     }
     if (message.split(' ').length > 2) {
@@ -138,10 +138,13 @@ const getLanguages = function (commit) {
 }
 
 
+
+
 searchCommits()
     .then(getLanguages)
     .then(formatTweet)
     .then(postTweet).catch(function (err) {
         console.error("FUCK UP: " + err);
-        console.error(err);
-    });
+        return err;
+    }).then(() => { return false; });
+
