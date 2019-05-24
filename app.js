@@ -92,6 +92,7 @@ const getLanguages = function (commit) {
                 // do stuff
                 i++;
                 language = (language === "C#" ? "CSharp" : language)
+                language = (language === "C++" ? "CPlusPlus" : language)
                 language = language.replace(/\s+/g, '');
                 
                 var percent = ((bytes / totalBytes) * 100).toFixed(2)
