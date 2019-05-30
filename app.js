@@ -6,6 +6,8 @@ require('dotenv').config({ path: path.resolve(__dirname, './.env') })
 
 const CLquery = process.argv[2];
 
+const runDate = new Date();
+
 var client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -27,7 +29,6 @@ const searchCommits = function () {
     let wordCount = words.length - 1;
     let word = words[Math.floor(Math.random() * wordCount)]
 
-    console.log(CLquery);
     if (CLquery != null) {
 
         var options = { q: '"' + word + '" "' + CLquery + '"' }
@@ -91,11 +92,17 @@ const postTweet = function (tweet) {
 
         client.post('statuses/update', tweetData, function (err, response) {
             if (err) { throw (err) } else {
+
+                console.log("\nSUCCESS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                console.log(runDate +'\n');
                 console.log('Tweeted: ', tweet)
+                console.log("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
             }
         });
     } else {
-        console.log("Tweeting Skipped");
+        
+        throw "Tweeting Skipped";
     }
 
 }
@@ -144,7 +151,13 @@ searchCommits()
     .then(getLanguages)
     .then(formatTweet)
     .then(postTweet).catch(function (err) {
-        console.error("FUCK UP: " + err);
+        console.error("\nERROR ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        console.error(runDate +'\n');
+        console.error(err);
+        console.error("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        console.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+
         return err;
     }).then(() => { return false; });
 
