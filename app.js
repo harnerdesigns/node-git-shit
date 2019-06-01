@@ -25,7 +25,7 @@ const octokit = Octokit({
 let words = ["fuck", "shit", "damn", "ass", "motherfucker", "goddamn", "asshole", "unfucked", "unfuck", "fucky", "shitty", "piece of shit", "hate javascript", "fucking", "bitch", "bitchy", "bitches", "fucked", "cunt", "bastard", "hell", "shitass"]
 
 const searchCommits = function () {
-
+ 
     let wordCount = words.length - 1;
     let word = words[Math.floor(Math.random() * wordCount)]
 
