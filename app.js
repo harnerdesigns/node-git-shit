@@ -22,7 +22,7 @@ const octokit = Octokit({
     previews: ['cloak-preview']
 })
 
-let words = ["fuck", "shit", "damn", "ass", "motherfucker", "goddamn", "asshole", "unfucked", "unfuck", "fucky", "shitty", "piece of shit", "hate javascript", "fucking", "bitch", "bitchy","bitches", "fucked", "cunt", "bastard", "hell", "shitass"]
+let words = ["fuck", "shit", "damn", "ass", "motherfucker", "goddamn", "asshole", "unfucked", "unfuck", "fucky", "shitty", "piece of shit", "hate javascript", "fucking", "bitch", "bitchy", "bitches", "fucked", "cunt", "bastard", "hell", "shitass"]
 
 const searchCommits = function () {
 
